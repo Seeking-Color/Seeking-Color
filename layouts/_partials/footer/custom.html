@@ -1,0 +1,25 @@
+<!--
+  夜间限定文章卡片时间判定脚本
+  夜间区间：20:00 ~ 06:00（访客本地时间）
+  夜间 → 保留卡片，移除 display:none
+  白天 → 彻底移除 DOM 节点
+--><script>
+(function() {
+    var cards = document.querySelectorAll('[data-time-lock="night"]');
+    if (!cards.length) return;
+
+    var hour = new Date().getHours();
+    // 夜间定义为 20:00~23:59 或 0:00~5:59
+    var isNight = (hour >= 20 || hour < 6);
+
+    cards.forEach(function(card) {
+        if (isNight) {
+            // 夜间：移除 FOUC 防护的 display:none，保留卡片
+            card.style.display = '';
+        } else {
+            // 白天：直接从 DOM 中移除节点，不留空白
+            card.parentNode.removeChild(card);
+        }
+    });
+})();
+</script>

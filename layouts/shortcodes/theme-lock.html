@@ -1,0 +1,27 @@
+{{- $allow := .Get "allow" | default "dark" -}}
+{{- $schemeID := delimit (shuffle (seq 1000 9999)) "" -}}
+
+<div id="theme-lock-{{ $schemeID }}"
+     data-allow="{{ $allow }}"
+     style="display:none;">
+    {{ .Inner | safeHTML }}
+</div>
+
+<script>
+(function() {
+    var el = document.getElementById('theme-lock-{{ $schemeID }}');
+    if (!el) return;
+
+    var allow = el.getAttribute('data-allow');
+
+    function check() {
+        el.style.display = (document.documentElement.dataset.scheme === allow) ? '' : 'none';
+    }
+
+    // 页面载入时校验一次 —— <head> 内联脚本在 DOM 构建前已设置 data-scheme
+    check();
+
+    // 监听 Stack 原生 onColorSchemeChange 事件，主题切换时实时更新
+    window.addEventListener('onColorSchemeChange', check);
+})();
+</script>

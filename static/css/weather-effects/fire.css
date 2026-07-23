@@ -1,0 +1,54 @@
+/* 火焰 —— 底部暖光 + 火星升腾 */
+.weather-effect-wrap {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+}
+/* 底层暖光 */
+.weather-effect-wrap::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 45%;
+    background: linear-gradient(to top, rgba(255,100,20,.15) 0%, rgba(255,140,30,.08) 25%, rgba(255,80,10,.03) 50%, transparent 100%);
+    animation: fire-base-flicker 2.5s ease-in-out infinite alternate;
+}
+/* 火星粒子 */
+.weather-effect-wrap::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background-image:
+        radial-gradient(2.5px 2.5px at 12% 88%, rgba(255,160,30,.6), transparent),
+        radial-gradient(1.8px 1.8px at 28% 93%, rgba(255,120,20,.55), transparent),
+        radial-gradient(3px 3px at 45% 82%, rgba(255,180,40,.5), transparent),
+        radial-gradient(1.5px 1.5px at 62% 91%, rgba(255,140,25,.58), transparent),
+        radial-gradient(2.2px 2.2px at 78% 86%, rgba(255,155,35,.52), transparent),
+        radial-gradient(2px 2px at 8% 80%, rgba(255,170,22,.55), transparent),
+        radial-gradient(1.6px 1.6px at 35% 85%, rgba(255,130,28,.6), transparent),
+        radial-gradient(2.8px 2.8px at 52% 90%, rgba(255,150,32,.48), transparent),
+        radial-gradient(1.4px 1.4px at 68% 79%, rgba(255,165,24,.54), transparent),
+        radial-gradient(2.2px 2.2px at 85% 88%, rgba(255,135,27,.57), transparent),
+        radial-gradient(2.5px 2.5px at 18% 76%, rgba(255,175,18,.45), transparent),
+        radial-gradient(1.7px 1.7px at 42% 94%, rgba(255,125,26,.62), transparent),
+        radial-gradient(2px 2px at 56% 81%, rgba(255,158,30,.5), transparent),
+        radial-gradient(1.9px 1.9px at 72% 89%, rgba(255,142,24,.56), transparent),
+        radial-gradient(3px 3px at 92% 85%, rgba(255,148,28,.48), transparent);
+    animation: fire-sparks 4s linear infinite;
+}
+@keyframes fire-base-flicker {
+    0% { opacity: .6; transform: scaleY(.92); }
+    50% { opacity: 1; transform: scaleY(1.08); }
+    100% { opacity: .75; transform: scaleY(.98); }
+}
+@keyframes fire-sparks {
+    0% { transform: translateY(0); opacity: 1; }
+    80% { opacity: .3; }
+    100% { transform: translateY(-100vh); opacity: 0; }
+}

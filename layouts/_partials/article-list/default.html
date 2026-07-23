@@ -1,0 +1,6 @@
+{{- $image := partial "helper/image" (dict "Image" .Params.image "Resources" .Resources "Context" .) -}}
+{{- /* 若文章 FrontMatter 设置了 timeLock: night，给卡片打上标记属性 */ -}}
+<article class="{{ if $image }}has-image{{ end }}"
+    {{- if eq .Params.timeLock "night" }} data-time-lock="night"{{ end }}>
+    {{ partial "article/components/header" (dict "Page" . "IsList" true) }}
+</article>

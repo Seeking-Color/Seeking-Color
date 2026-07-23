@@ -1,0 +1,33 @@
+/* 晴天 —— 太阳光晕 */
+.weather-effect-wrap {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+}
+.weather-effect-wrap::before {
+    content: "";
+    position: absolute;
+    top: -120px;
+    right: -120px;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(255,220,80,.5) 0%, rgba(255,195,50,.25) 35%, rgba(255,170,30,.06) 60%, transparent 70%);
+    border-radius: 50%;
+    animation: sunny-glow 4s ease-in-out infinite alternate;
+}
+.weather-effect-wrap::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 50px;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(255,240,150,.38) 0%, rgba(255,225,110,.12) 40%, transparent 60%);
+    border-radius: 50%;
+    animation: sunny-glow 3s ease-in-out 1.5s infinite alternate;
+}
+@keyframes sunny-glow {
+    0% { opacity: .6; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1.18); }
+}

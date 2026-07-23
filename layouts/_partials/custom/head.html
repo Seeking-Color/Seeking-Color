@@ -1,0 +1,142 @@
+<!--
+  动态天气特效背景脚本
+  - 同一自然日固定一种天气，跨日期重新随机
+  - 按需懒加载当前命中的特效 CSS，不一次性加载全部 9 套
+  - 兼容 Stack 主题切换 & PJAX 无刷新页面跳转
+--><script>
+(function() {
+    // ========== 天气 key 清单 ==========
+    var WEATHER_KEYS = [
+        'sunny','lightrain','moderaterain','heavyrain',
+        'storm','thunderstorm','fog','cloudy','fire'
+    ];
+    var CSS_BASE = '/css/weather-effects/';  // 特效 CSS 根路径
+    var STORAGE_KEY = 'weather-effect';       // localStorage 键名
+    var CONTAINER_ID = 'weather-effect-wrap';  // 特效容器 ID
+
+    // ========== 获取今日日期字符串 YYYY-MM-DD ==========
+    function getTodayStr() {
+        var d = new Date();
+        return d.getFullYear() + '-' +
+               String(d.getMonth() + 1).padStart(2, '0') + '-' +
+               String(d.getDate()).padStart(2, '0');
+    }
+
+    // ========== 从 localStorage 读取缓存 ==========
+    function getCached() {
+        try {
+            var raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) return JSON.parse(raw);
+        } catch (e) { /* ignore */ }
+        return null;
+    }
+
+    // ========== 写入 localStorage 缓存 ==========
+    function setCache(activeKey) {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                saveDate: getTodayStr(),
+                activeKey: activeKey
+            }));
+        } catch (e) { /* ignore */ }
+    }
+
+    // ========== 随机选取天气 key ==========
+    function randomKey() {
+        return WEATHER_KEYS[Math.floor(Math.random() * WEATHER_KEYS.length)];
+    }
+
+    // ========== 确定今日生效的天气 key ==========
+    function resolveKey() {
+        var today = getTodayStr();
+        var cached = getCached();
+        if (cached && cached.saveDate === today) {
+            return cached.activeKey;  // 同一天，沿用缓存
+        }
+        // 跨日期：重新随机
+        var key = randomKey();
+        setCache(key);
+        return key;
+    }
+
+    var activeKey = resolveKey();
+
+    // ========== CSS 懒加载：动态创建 link 标签，避免重复加载 ==========
+    var cssLoaded = {};  // 全局标记，key → true
+
+    function loadCSS(key) {
+        if (cssLoaded[key]) return;  // 已加载，跳过
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = CSS_BASE + key + '.css';
+        link.setAttribute('data-weather-css', key);  // 标记以便识别
+        document.head.appendChild(link);
+        cssLoaded[key] = true;
+    }
+
+    // ========== 创建特效 DOM 容器 ==========
+    function createContainer() {
+        // 检查是否已存在
+        var existing = document.getElementById(CONTAINER_ID);
+        if (existing) return existing;
+
+        var wrap = document.createElement('div');
+        wrap.id = CONTAINER_ID;
+        wrap.className = 'weather-effect-wrap';
+        // z-index 必须高于页面内容层，否则特效被内容区背景色完全遮盖
+        wrap.style.zIndex = '999';
+        document.body.prepend(wrap);  // 插入 body 最前面
+        return wrap;
+    }
+
+    // ========== 暗色模式下调整特效透明度，保证文字可读性 ==========
+    function adjustOpacity() {
+        var wrap = document.getElementById(CONTAINER_ID);
+        if (!wrap) return;
+        var scheme = document.documentElement.dataset.scheme;
+        // dark / auto-dark 时降低特效透明度，避免干扰阅读
+        wrap.style.opacity = (scheme === 'dark') ? '0.5' : '1';
+    }
+
+    // ========== 初始化：懒加载 CSS + 创建容器 + 调整透明度 ==========
+    function init() {
+        loadCSS(activeKey);
+
+        // 等待 body 可用后再插入特效容器（head 阶段 body 为 null）
+        function setupContainer() {
+            createContainer();
+            adjustOpacity();
+        }
+        if (document.body) {
+            setupContainer();
+        } else {
+            document.addEventListener('DOMContentLoaded', setupContainer);
+        }
+
+        // 监听 Stack 主题切换事件
+        window.addEventListener('onColorSchemeChange', adjustOpacity);
+    }
+
+    // ========== 主流程 ==========
+    // Stack 的 main.ts 在 window.load 中通过 setTimeout(Stack.init, 0) 初始化，
+    // 色系设定脚本在 <head> 内联执行（同步，早于本脚本），直接读取当前 scheme 即可
+    init();
+
+    // ========== PJAX 兼容 ==========
+    // Stack 主题未内置 PJAX，但若未来开启或使用 Turbo 等，
+    // 在页面可见性变化 / popstate 时重新确保容器存在
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            // 页面重新可见时，容器可能被 PJAX 替换丢失，确保存在
+            createContainer();
+            adjustOpacity();
+        }
+    });
+
+    // 浏览器前进/后退（PJAX 或 Turbo 驱动时可能触发）
+    window.addEventListener('pageshow', function() {
+        createContainer();
+        adjustOpacity();
+    });
+})();
+</script>

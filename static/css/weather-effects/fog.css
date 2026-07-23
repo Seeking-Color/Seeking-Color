@@ -1,0 +1,43 @@
+/* 迷雾 —— 多层浓雾飘动 */
+.weather-effect-wrap {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+}
+/* 底层厚雾 */
+.weather-effect-wrap::before {
+    content: "";
+    position: absolute;
+    inset: -100px;
+    background:
+        radial-gradient(ellipse 50% 40% at 15% 60%, rgba(180,190,205,.38) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 50% at 55% 35%, rgba(170,182,198,.32) 0%, transparent 65%),
+        radial-gradient(ellipse 45% 35% at 80% 55%, rgba(185,194,208,.35) 0%, transparent 68%),
+        radial-gradient(ellipse 55% 45% at 35% 70%, rgba(175,186,200,.3) 0%, transparent 66%),
+        radial-gradient(ellipse 40% 55% at 70% 20%, rgba(178,188,202,.28) 0%, transparent 62%);
+    animation: fog-drift-1 14s ease-in-out infinite;
+}
+/* 上层薄雾 */
+.weather-effect-wrap::after {
+    content: "";
+    position: absolute;
+    inset: -80px;
+    background:
+        radial-gradient(ellipse 40% 35% at 60% 45%, rgba(195,200,212,.24) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 25% 50%, rgba(188,195,208,.2) 0%, transparent 68%),
+        radial-gradient(ellipse 35% 30% at 45% 25%, rgba(192,198,210,.22) 0%, transparent 60%),
+        radial-gradient(ellipse 45% 50% at 75% 65%, rgba(185,192,205,.18) 0%, transparent 63%);
+    animation: fog-drift-2 18s ease-in-out 3s infinite;
+}
+@keyframes fog-drift-1 {
+    0%, 100% { transform: translateX(-40px) scale(1); }
+    25% { transform: translateX(15px) scale(1.04); }
+    50% { transform: translateX(35px) scale(.98); }
+    75% { transform: translateX(-20px) scale(1.03); }
+}
+@keyframes fog-drift-2 {
+    0%, 100% { transform: translateX(30px) scale(1.02); }
+    33% { transform: translateX(-35px) scale(.97); }
+    66% { transform: translateX(10px) scale(1.04); }
+}

@@ -1,0 +1,72 @@
+/* 大雨 —— 密集垂直雨丝 */
+.weather-effect-wrap {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+}
+.weather-effect-wrap::before {
+    content: "";
+    position: absolute;
+    top: -40px;
+    left: 1%;
+    width: 2px;
+    height: 28px;
+    background: linear-gradient(to bottom, transparent, rgba(50,110,190,.65), transparent);
+    border-radius: 0 0 50% 50%;
+    box-shadow:
+        4vw 1.5rem 0 rgba(45,105,185,.58),
+        9vw 3rem 0 rgba(60,118,198,.68),
+        14vw 0.3rem 0 rgba(40,100,180,.52),
+        19vw 2.2rem 0 rgba(55,112,192,.62),
+        24vw 3.8rem 0 rgba(35,95,175,.48),
+        29vw 0.8rem 0 rgba(65,120,200,.7),
+        34vw 2.6rem 0 rgba(42,102,182,.55),
+        39vw 1rem 0 rgba(58,115,195,.64),
+        44vw 3.4rem 0 rgba(48,108,188,.6),
+        49vw 0.5rem 0 rgba(38,98,178,.5),
+        54vw 2rem 0 rgba(52,110,190,.63),
+        59vw 3.2rem 0 rgba(44,104,184,.57),
+        64vw 0.2rem 0 rgba(62,118,198,.66),
+        69vw 2.8rem 0 rgba(34,94,174,.46),
+        74vw 1.2rem 0 rgba(56,114,194,.61),
+        79vw 3.6rem 0 rgba(50,108,188,.59),
+        84vw 0.7rem 0 rgba(36,96,176,.49),
+        89vw 2.4rem 0 rgba(48,106,186,.56),
+        94vw 1.8rem 0 rgba(54,112,192,.6),
+        7vw 4rem 0 rgba(40,100,180,.52);
+    animation: rain-drop 0.25s linear infinite;
+}
+.weather-effect-wrap::after {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: 5%;
+    width: 1.5px;
+    height: 20px;
+    background: linear-gradient(to bottom, transparent, rgba(30,85,165,.45), transparent);
+    border-radius: 0 0 50% 50%;
+    box-shadow:
+        12vw 2rem 0 rgba(25,80,160,.4),
+        23vw 0.6rem 0 rgba(38,92,172,.48),
+        35vw 3.4rem 0 rgba(28,82,163,.42),
+        47vw 1.2rem 0 rgba(35,88,168,.46),
+        58vw 2.8rem 0 rgba(22,78,158,.38),
+        68vw 0.4rem 0 rgba(40,94,174,.5),
+        78vw 3rem 0 rgba(26,80,162,.41),
+        88vw 1.6rem 0 rgba(33,86,166,.44),
+        2vw 3.8rem 0 rgba(20,76,156,.36),
+        16vw 0.2rem 0 rgba(36,90,170,.47),
+        28vw 2.4rem 0 rgba(24,79,160,.39),
+        40vw 1rem 0 rgba(32,84,164,.43),
+        52vw 3.6rem 0 rgba(27,81,162,.41),
+        63vw 0.8rem 0 rgba(38,92,172,.48),
+        75vw 2.2rem 0 rgba(22,77,157,.37),
+        86vw 3.2rem 0 rgba(30,85,165,.45);
+    animation: rain-drop 0.3s linear 0.1s infinite;
+}
+@keyframes rain-drop {
+    0% { transform: translateY(-40px); opacity: 0; }
+    8% { opacity: 1; }
+    100% { transform: translateY(calc(100vh + 40px)); }
+}

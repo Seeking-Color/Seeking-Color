@@ -1,0 +1,10 @@
+<!--
+  FOUC 防护：夜间限定文章卡片在页面渲染后、JS 执行前默认隐藏
+  JS 在校验本地时间后：夜间 → 移除属性显示卡片 / 白天 → 从 DOM 完全移除
+--><style>
+[data-time-lock="night"] {
+    display: none;
+}
+</style>
+
+{{- partial "custom/head.html" . -}}
