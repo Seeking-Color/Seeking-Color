@@ -1,63 +1,44 @@
-/* 中雨 —— 中等密度垂直雨丝 */
+/* 中雨 —— 中等密度的雨丝 + 浅积水波纹 */
 .weather-effect-wrap {
     pointer-events: none;
     position: fixed;
     inset: 0;
     overflow: hidden;
 }
+
+/* 雨丝层 */
 .weather-effect-wrap::before {
     content: "";
     position: absolute;
-    top: -50px;
-    left: 2%;
-    width: 1.5px;
-    height: 22px;
-    background: linear-gradient(to bottom, transparent, rgba(90,140,210,.58), transparent);
-    border-radius: 0 0 50% 50%;
-    box-shadow:
-        6vw 2rem 0 rgba(85,135,205,.52),
-        13vw 0.3rem 0 rgba(100,148,215,.6),
-        20vw 3.5rem 0 rgba(78,128,200,.48),
-        27vw 1rem 0 rgba(95,142,212,.56),
-        35vw 2.8rem 0 rgba(82,132,203,.5),
-        42vw 0.6rem 0 rgba(105,152,218,.62),
-        50vw 3rem 0 rgba(75,125,198,.46),
-        57vw 1.5rem 0 rgba(92,138,210,.54),
-        65vw 0.2rem 0 rgba(88,136,208,.53),
-        72vw 2.4rem 0 rgba(80,130,201,.49),
-        80vw 0.8rem 0 rgba(108,155,220,.58),
-        88vw 3.6rem 0 rgba(70,120,195,.44),
-        95vw 1.2rem 0 rgba(98,145,214,.55),
-        10vw 4rem 0 rgba(76,126,199,.47);
-    animation: rain-drop 0.4s linear infinite;
+    inset: 0;
+    background-image:
+        repeating-linear-gradient(2deg, transparent, transparent 20px, rgba(80,140,210,.45) 20px, rgba(80,140,210,.45) 21px),
+        repeating-linear-gradient(-4deg, transparent, transparent 35px, rgba(60,120,195,.4) 35px, rgba(60,120,195,.4) 36px),
+        repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(90,145,215,.35) 28px, rgba(90,145,215,.35) 29px),
+        repeating-linear-gradient(3deg, transparent, transparent 50px, rgba(70,130,200,.3) 50px, rgba(70,130,200,.3) 51px);
+    background-size: 100% 100%;
+    animation: moderaterain-fall .3s linear infinite;
+    opacity: .9;
 }
+
+/* 底部积水面 */
 .weather-effect-wrap::after {
     content: "";
     position: absolute;
-    top: -30px;
-    left: 7%;
-    width: 1px;
-    height: 16px;
-    background: linear-gradient(to bottom, transparent, rgba(70,120,190,.42), transparent);
-    border-radius: 0 0 50% 50%;
-    box-shadow:
-        18vw 1.2rem 0 rgba(65,115,185,.38),
-        30vw 3rem 0 rgba(75,122,192,.44),
-        44vw 0.4rem 0 rgba(60,110,182,.36),
-        58vw 2.2rem 0 rgba(78,125,195,.46),
-        69vw 1rem 0 rgba(68,118,188,.4),
-        82vw 3.4rem 0 rgba(72,120,190,.42),
-        4vw 2rem 0 rgba(62,112,184,.37),
-        26vw 0.8rem 0 rgba(77,124,194,.45),
-        39vw 3.8rem 0 rgba(58,108,180,.34),
-        52vw 1.6rem 0 rgba(70,118,187,.41),
-        64vw 0.1rem 0 rgba(74,122,191,.43),
-        76vw 2.8rem 0 rgba(66,116,186,.39),
-        90vw 1.8rem 0 rgba(73,121,190,.42);
-    animation: rain-drop 0.5s linear 0.15s infinite;
+    bottom: 0;
+    left: -10%;
+    width: 120%;
+    height: 30px;
+    background: radial-gradient(ellipse at 50% 100%, rgba(100,150,210,.15) 0%, transparent 70%);
+    animation: puddle-ripple 1.5s ease-in-out infinite;
 }
-@keyframes rain-drop {
-    0% { transform: translateY(-50px); opacity: 0; }
-    10% { opacity: 1; }
-    100% { transform: translateY(calc(100vh + 50px)); }
+
+@keyframes moderaterain-fall {
+    0% { transform: translateY(-40px); }
+    100% { transform: translateY(40px); }
+}
+
+@keyframes puddle-ripple {
+    0%, 100% { transform: scaleY(.8); opacity: .3; }
+    50% { transform: scaleY(1.2); opacity: .6; }
 }

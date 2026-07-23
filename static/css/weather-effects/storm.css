@@ -1,61 +1,43 @@
-/* 暴雨 —— 狂风斜向密集雨丝 + 昏暗遮罩 */
+/* 暴雨 —— 狂风骤雨 + 密积水 + 轻微视角变暗 */
 .weather-effect-wrap {
     pointer-events: none;
     position: fixed;
     inset: 0;
     overflow: hidden;
 }
-/* 暗色天幕 */
+
+/* 暗色遮罩 —— 暴雨天色昏暗 */
 .weather-effect-wrap::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,.18);
+    background: rgba(0,0,0,.15);
     animation: storm-darken 2s ease-in-out infinite alternate;
 }
-/* 斜向狂风雨丝 —— 模拟大风，用 skew 让雨丝倾斜 */
+
+/* 狂风倾斜雨丝 —— 角度更大 */
 .weather-effect-wrap::after {
     content: "";
     position: absolute;
-    top: -30px;
-    left: -5%;
-    width: 2px;
-    height: 35px;
-    background: linear-gradient(to bottom, transparent, rgba(30,85,170,.55), transparent);
-    border-radius: 0 0 50% 50%;
-    transform: skewX(-20deg);
-    box-shadow:
-        3vw 2rem 0 rgba(25,80,165,.48),
-        7vw 0.5rem 0 rgba(42,95,178,.58),
-        11vw 3.5rem 0 rgba(18,72,155,.4),
-        15vw 1.2rem 0 rgba(38,88,172,.52),
-        19vw 2.8rem 0 rgba(22,76,160,.44),
-        23vw 0.8rem 0 rgba(48,100,182,.6),
-        27vw 3rem 0 rgba(15,68,150,.38),
-        31vw 1.8rem 0 rgba(35,85,168,.5),
-        35vw 0.3rem 0 rgba(28,80,163,.46),
-        39vw 2.4rem 0 rgba(45,98,180,.57),
-        43vw 3.8rem 0 rgba(20,74,158,.42),
-        47vw 1rem 0 rgba(40,92,175,.54),
-        51vw 0.6rem 0 rgba(25,78,162,.45),
-        55vw 3.2rem 0 rgba(33,84,167,.49),
-        59vw 2rem 0 rgba(18,70,153,.39),
-        63vw 0.9rem 0 rgba(42,96,178,.56),
-        67vw 2.6rem 0 rgba(28,82,165,.47),
-        71vw 1.4rem 0 rgba(36,88,170,.51),
-        75vw 3.6rem 0 rgba(22,76,160,.43),
-        79vw 0.4rem 0 rgba(44,97,179,.55),
-        83vw 2.2rem 0 rgba(16,68,150,.37),
-        87vw 1.6rem 0 rgba(30,84,168,.48),
-        91vw 3rem 0 rgba(24,78,162,.44);
-    animation: storm-drift 0.15s linear infinite;
+    inset: -100px 0 0 0;
+    background-image:
+        repeating-linear-gradient(25deg, transparent, transparent 8px, rgba(40,100,185,.5) 8px, rgba(40,100,185,.5) 9px),
+        repeating-linear-gradient(22deg, transparent, transparent 12px, rgba(20,85,170,.45) 12px, rgba(20,85,170,.45) 13px),
+        repeating-linear-gradient(28deg, transparent, transparent 10px, rgba(50,110,190,.42) 10px, rgba(50,110,190,.42) 11px),
+        repeating-linear-gradient(20deg, transparent, transparent 15px, rgba(30,95,175,.38) 15px, rgba(30,95,175,.38) 16px),
+        repeating-linear-gradient(26deg, transparent, transparent 7px, rgba(60,120,200,.35) 7px, rgba(60,120,200,.35) 8px),
+        repeating-linear-gradient(18deg, transparent, transparent 18px, rgba(45,105,180,.32) 18px, rgba(45,105,180,.32) 19px);
+    background-size: 100% 100%;
+    animation: storm-fall .12s linear infinite;
+    opacity: .95;
 }
+
+@keyframes storm-fall {
+    0% { transform: translate(-10px, -25px); }
+    100% { transform: translate(10px, 25px); }
+}
+
 @keyframes storm-darken {
-    0% { opacity: .7; }
+    0% { opacity: .6; }
     100% { opacity: 1; }
-}
-@keyframes storm-drift {
-    0% { transform: skewX(-20deg) translate(0, -30px); opacity: 0; }
-    8% { opacity: 1; }
-    100% { transform: skewX(-20deg) translate(-30px, calc(100vh + 30px)); }
 }
