@@ -14,7 +14,7 @@ weight: 1
 写下愿望，静待回响 ✨
 
 <script src="https://giscus.app/client.js"
-        data-repo="Seeking-Color/Seeking-Color"
+        data-repo="seeking-color/Seeking-Color"
         data-repo-id="R_kgDOTg-XQQ"
         data-category="Announcements"
         data-category-id="DIC_kwDOTg-XQc4DBzPB"
