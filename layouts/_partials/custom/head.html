@@ -63,7 +63,7 @@ var CSS_BASE = document.querySelector('[data-weather-css-base]').dataset.weather
     }
 
     var activeKey = resolveKey();
-
+    window.activeKey = activeKey;
     // ========== CSS 懒加载：动态创建 link 标签，避免重复加载 ==========
     var cssLoaded = {};  // 全局标记，key → true
 
@@ -180,10 +180,21 @@ var CSS_BASE = document.querySelector('[data-weather-css-base]').dataset.weather
 <a class="crystal-ball-float" href="/Seeking-Color/post/crystal-wish/" title="打开流言水晶球">
 🔮
 </a>
-
+<!-- 承载音频路径前缀，规避script内部模板语法冲突 -->
+<span hidden id="audio-path-prefix" data-prefix="{{ "audio/" | relURL }}"></span>
 
 <style>
-/* 魔法卷轴阅读进度条 */
+/* ========== 选中文字微光效果 ========== */
+::selection {
+    background: rgba(168, 139, 255, 0.35);
+    text-shadow: 0 0 6px rgba(200, 175, 255, 0.6);
+}
+::-moz-selection {
+    background: rgba(168, 139, 255, 0.35);
+    text-shadow: 0 0 6px rgba(200, 175, 255, 0.6);
+}
+
+/* ========== 魔法卷轴阅读进度条 ========== */
 .scroll-progress-wrap {
     position: fixed;
     top: 0;
@@ -205,28 +216,126 @@ var CSS_BASE = document.querySelector('[data-weather-css-base]').dataset.weather
     box-shadow: 0 0 10px #9d7dff88;
 }
 
-/* 文字选中微光效果 */
-::selection {
-    background: rgba(168, 139, 255, 0.35);
-    text-shadow: 0 0 6px rgba(200, 175, 255, 0.6);
+/* ========== 秘境白噪音悬浮按钮 ========== */
+.audio-toggle-btn {
+    position: fixed;
+    right: 24px;
+    bottom: 190px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #c8b8ff 0%, #7b61ff 100%);
+    box-shadow: 0 0 14px #9d88ff77;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+    cursor:pointer;
+    z-index:9998;
+    transition: all 0.3s ease;
 }
-::-moz-selection {
-    background: rgba(168, 139, 255, 0.35);
-    text-shadow: 0 0 6px rgba(200, 175, 255, 0.6);
+.audio-toggle-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 22px #b8a2ff;
+}
+.audio-toggle-btn.mute {
+    opacity: 0.6;
+    filter: grayscale(0.4);
+}
+[data-scheme="dark"] .audio-toggle-btn {
+    box-shadow: 0 0 14px #b8a2ff55;
 }
 </style>
 
+<!-- 阅读进度条DOM -->
 <div class="scroll-progress-wrap">
     <div class="scroll-progress-bar"></div>
 </div>
 
+<!-- 白噪音悬浮按钮 -->
+<div class="audio-toggle-btn mute" id="audioBtn" title="秘境白噪音">🔊</div>
+
 <script>
 (function(){
+    const audioBtn = document.getElementById("audioBtn");
+    let bgAudio = null;
+    let audioPlaying = false;
+    const STORAGE_AUDIO_KEY = "weather-audio-status";
+    let currentWeatherKey = null;
+
+    // 读取Hugo渲染好的音频根路径
+    const audioPrefix = document.querySelector('#audio-path-prefix').dataset.prefix;
+
+    // 天象与音频文件映射【按你最新要求调整】
+    const audioMap = {
+        sunny: audioPrefix + "sunny.mp3",
+        lightrain: audioPrefix + "lightrain.m4a",
+        moderaterain: audioPrefix + "lightrain.m4a",
+        heavyrain: audioPrefix + "lightrain.m4a",
+        storm: audioPrefix + "lightrain.m4a",
+        thunderstorm: audioPrefix + "thunderstorm.wav",
+        fog: audioPrefix + "fog.wav",
+        cloudy: audioPrefix + "sunny.mp3",
+        fire: audioPrefix + "sunny.mp3"
+    };
+
+    // 等待全局天气变量就绪
+    function waitWeatherKey(){
+        return new Promise(resolve=>{
+            const check = ()=>{
+                if(window.activeKey){
+                    currentWeatherKey = window.activeKey;
+                    resolve(currentWeatherKey);
+                }else{
+                    setTimeout(check, 50);
+                }
+            }
+            check();
+        })
+    }
+
+    // 根据当日天气获取音频地址
+    async function getWeatherAudioUrl(){
+        await waitWeatherKey();
+        const key = currentWeatherKey;
+        console.log("【天气key】", key, "匹配音频:", audioMap[key]);
+        return audioMap[key] ?? audioMap.sunny;
+    }
+
+    // 播放/暂停控制
+    async function toggleAudio(){
+        if(!bgAudio){
+            const url = await getWeatherAudioUrl();
+            bgAudio = new Audio(url);
+            bgAudio.loop = true;
+            bgAudio.volume = 0.35;
+        }
+        if(audioPlaying){
+            bgAudio.pause();
+            audioBtn.classList.add("mute");
+            audioBtn.innerText = "🔇";
+            audioPlaying = false;
+            localStorage.setItem(STORAGE_AUDIO_KEY, "off");
+        }else{
+            // 每次点击喇叭，重新加载当前天气对应的音频
+            bgAudio.src = await getWeatherAudioUrl();
+            bgAudio.play().catch(err=>{
+                console.log("音频需要用户交互触发，浏览器策略限制");
+            });
+            audioBtn.classList.remove("mute");
+            audioBtn.innerText = "🔊";
+            audioPlaying = true;
+            localStorage.setItem(STORAGE_AUDIO_KEY, "on");
+        }
+    }
+    audioBtn.addEventListener("click", toggleAudio);
+
+    // 页面滚动进度条逻辑
     const bar = document.querySelector('.scroll-progress-bar');
     function updateProgress(){
         const scrollTop = window.scrollY;
-        const height = document.documentElement.scrollHeight - window.innerHeight;
-        const percent = (scrollTop / height) * 100;
+        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const percent = scrollHeight <= 0 ? 0 : (scrollTop / scrollHeight) * 100;
         if(bar) bar.style.width = percent + "%";
     }
     window.addEventListener('scroll', updateProgress);
