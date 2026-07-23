@@ -1,3 +1,5 @@
+<!-- 单独全局注入路径，隔离模板语法 -->
+<span hidden data-weather-css-base="{{ "css/weather-effects/" | relURL }}"></span>
 <!--
   动态天气特效背景脚本
   - 同一自然日固定一种天气，跨日期重新随机
@@ -10,7 +12,8 @@
         'sunny','lightrain','moderaterain','heavyrain',
         'storm','thunderstorm','fog','cloudy','fire'
     ];
-    var CSS_BASE = 'css/weather-effects/';  // 特效 CSS 根路径
+    // 读取隐藏dom内的路径
+var CSS_BASE = document.querySelector('[data-weather-css-base]').dataset.weatherCssBase;
     var STORAGE_KEY = 'weather-effect';       // localStorage 键名
     var CONTAINER_ID = 'weather-effect-wrap';  // 特效容器 ID
 
@@ -177,3 +180,56 @@
 <a class="crystal-ball-float" href="/Seeking-Color/post/crystal-wish/" title="打开流言水晶球">
 🔮
 </a>
+
+
+<style>
+/* 魔法卷轴阅读进度条 */
+.scroll-progress-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    z-index: 99999;
+    pointer-events: none;
+    background: transparent;
+}
+.scroll-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg,#a88bff,#e8b8ff,#8bd3ff);
+    box-shadow: 0 0 8px #b89cff;
+    transition: width 0.08s linear;
+}
+[data-scheme="dark"] .scroll-progress-bar {
+    box-shadow: 0 0 10px #9d7dff88;
+}
+
+/* 文字选中微光效果 */
+::selection {
+    background: rgba(168, 139, 255, 0.35);
+    text-shadow: 0 0 6px rgba(200, 175, 255, 0.6);
+}
+::-moz-selection {
+    background: rgba(168, 139, 255, 0.35);
+    text-shadow: 0 0 6px rgba(200, 175, 255, 0.6);
+}
+</style>
+
+<div class="scroll-progress-wrap">
+    <div class="scroll-progress-bar"></div>
+</div>
+
+<script>
+(function(){
+    const bar = document.querySelector('.scroll-progress-bar');
+    function updateProgress(){
+        const scrollTop = window.scrollY;
+        const height = document.documentElement.scrollHeight - window.innerHeight;
+        const percent = (scrollTop / height) * 100;
+        if(bar) bar.style.width = percent + "%";
+    }
+    window.addEventListener('scroll', updateProgress);
+    document.addEventListener('DOMContentLoaded', updateProgress);
+})();
+</script>
