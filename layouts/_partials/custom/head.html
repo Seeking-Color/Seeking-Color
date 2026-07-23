@@ -180,9 +180,6 @@ var CSS_BASE = document.querySelector('[data-weather-css-base]').dataset.weather
 <a class="crystal-ball-float" href="/Seeking-Color/post/crystal-wish/" title="打开留言水晶球">
 🔮
 </a>
-<!-- 承载音频路径前缀，规避script内部模板语法冲突 -->
-<span hidden id="audio-path-prefix" data-prefix="{{ "audio/" | relURL }}"></span>
-
 <style>
 /* ========== 选中文字微光效果 ========== */
 ::selection {
@@ -263,20 +260,17 @@ var CSS_BASE = document.querySelector('[data-weather-css-base]').dataset.weather
     const STORAGE_AUDIO_KEY = "weather-audio-status";
     let currentWeatherKey = null;
 
-    // 读取Hugo渲染好的音频根路径
-    const audioPrefix = document.querySelector('#audio-path-prefix').dataset.prefix;
-
-    // 天象与音频文件映射【按你最新要求调整】
+    // ========== jsDelivr CDN音频映射 ==========
     const audioMap = {
-        sunny: audioPrefix + "sunny.mp3",
-        lightrain: audioPrefix + "lightrain.m4a",
-        moderaterain: audioPrefix + "lightrain.m4a",
-        heavyrain: audioPrefix + "lightrain.m4a",
-        storm: audioPrefix + "lightrain.m4a",
-        thunderstorm: audioPrefix + "thunderstorm.wav",
-        fog: audioPrefix + "fog.wav",
-        cloudy: audioPrefix + "sunny.mp3",
-        fire: audioPrefix + "sunny.mp3"
+        sunny: "https://cdn.jsdelivr.net/gh/seeking-color/Seeking-Color@main/static/audio/sunny.mp3",
+        lightrain: "https://cdn.jsdelivr.net/gh/seeking-color/Seeking-Color@main/static/audio/lightrain.m4a",
+        moderaterain: "https://cdn.jsdelivr.net/gh/seeking-color/Seeking-Color@main/static/audio/lightrain.m4a",
+        heavyrain: "https://cdn.jsdelivr.net/gh/seeking-color/Seeking-Color@main/static/audio/lightrain.m4a",
+        storm: "https://cdn.jsdelivr.net/gh/seeking-color/Seeking-Color@main/static/audio/lightrain.m4a",
+        thunderstorm: "https://cdn.jsdelivr.net/gh/seeking-color/Seeking-Color@main/static/audio/thunderstorm.wav",
+        fog: "https://cdn.jsdelivr.net/gh/seeking-color/Seeking-Color@main/static/audio/fog.wav",
+        cloudy: "https://cdn.jsdelivr.net/gh/seeking-color/Seeking-Color@main/static/audio/sunny.mp3",
+        fire: "https://cdn.jsdelivr.net/gh/seeking-color/Seeking-Color@main/static/audio/sunny.mp3"
     };
 
     // 等待全局天气变量就绪
@@ -313,7 +307,7 @@ var CSS_BASE = document.querySelector('[data-weather-css-base]').dataset.weather
         if(audioPlaying){
             bgAudio.pause();
             audioBtn.classList.add("mute");
-            audioBtn.innerText = "🔇";
+            audioBtn.innerText = "🔊";
             audioPlaying = false;
             localStorage.setItem(STORAGE_AUDIO_KEY, "off");
         }else{
@@ -323,7 +317,7 @@ var CSS_BASE = document.querySelector('[data-weather-css-base]').dataset.weather
                 console.log("音频需要用户交互触发，浏览器策略限制");
             });
             audioBtn.classList.remove("mute");
-            audioBtn.innerText = "🔊";
+            audioBtn.innerText = "🔇";
             audioPlaying = true;
             localStorage.setItem(STORAGE_AUDIO_KEY, "on");
         }
