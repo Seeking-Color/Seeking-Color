@@ -13,7 +13,7 @@ weight: 1
 
 写下愿望，静待回响 ✨
 
-<script src="https://proxy-for-graphql.1933499695.workers.dev/client.js"
+<script src="https://giscus.app/client.js"
         data-repo="seeking-color/Seeking-Color"
         data-repo-id="R_kgDOTg-XQQ"
         data-category="Announcements"
@@ -25,7 +25,6 @@ weight: 1
         data-input-position="bottom"
         data-theme="preferred_color_scheme"
         data-lang="zh-CN"
-        data-loading="lazy"
         crossorigin="anonymous"
         async>
 </script>
