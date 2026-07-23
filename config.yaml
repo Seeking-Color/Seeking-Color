@@ -28,7 +28,7 @@ params:
 
   # 评论：先关掉，玩熟了再看第十一节接入 giscus
   comments:
-    enabled: false
+    enabled: true
 
 # 顶部/侧边菜单
 menu:
