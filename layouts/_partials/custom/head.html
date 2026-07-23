@@ -140,3 +140,40 @@
     });
 })();
 </script>
+<style>
+/* 水晶球悬浮按钮 */
+.crystal-ball-float {
+    position: fixed;
+    right: 24px;
+    bottom: 120px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #c8b8ff 0%, #7b61ff 100%);
+    box-shadow: 0 0 16px #9d88ff88, 0 0 30px #7b61ff55;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
+    cursor:pointer;
+    z-index:9999;
+    transition: all 0.3s ease;
+    animation: crystal-glow 3s ease-in-out infinite alternate;
+}
+.crystal-ball-float:hover{
+    transform: scale(1.1);
+    box-shadow: 0 0 22px #b8a2ff, 0 0 45px #8c70ff77;
+}
+@keyframes crystal-glow{
+    0%{filter: brightness(1);}
+    100%{filter: brightness(1.25);}
+}
+/* 暗色模式微调 */
+[data-scheme="dark"] .crystal-ball-float{
+    box-shadow: 0 0 18px #b8a2ff66;
+}
+</style>
+
+<a class="crystal-ball-float" href="/Seeking-Color/posts/crystal-wish/" title="打开流言水晶球">
+🔮
+</a>
