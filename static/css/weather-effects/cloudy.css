@@ -1,48 +1,43 @@
-/* 多云 —— 云层飘过 */
+/* 多云 —— 云层从左到右漂过 */
 .weather-effect-wrap {
     pointer-events: none;
     position: fixed;
     inset: 0;
     overflow: hidden;
 }
-
-/* 云朵1 —— 大块 */
 .weather-effect-wrap::before {
     content: "";
     position: absolute;
-    top: 5%;
-    left: -300px;
-    width: 400px;
-    height: 140px;
+    top: 3%;
+    left: -350px;
+    width: 420px;
+    height: 150px;
     background:
-        radial-gradient(ellipse at 30% 40%, rgba(240,242,248,.3) 0%, transparent 60%),
-        radial-gradient(ellipse at 50% 30%, rgba(220,225,238,.25) 0%, transparent 55%),
-        radial-gradient(ellipse at 70% 45%, rgba(235,238,245,.22) 0%, transparent 50%);
-    border-radius: 50%;
-    animation: cloudy-drift-1 20s linear infinite;
+        radial-gradient(ellipse at 30% 35%, rgba(230,235,245,.38) 0%, transparent 58%),
+        radial-gradient(ellipse at 50% 25%, rgba(215,222,238,.3) 0%, transparent 52%),
+        radial-gradient(ellipse at 68% 38%, rgba(225,232,243,.33) 0%, transparent 55%);
+    border-radius: 45%;
+    animation: cloud-drift-1 22s linear infinite;
 }
-
-/* 云朵2 */
 .weather-effect-wrap::after {
     content: "";
     position: absolute;
-    top: 15%;
-    left: -250px;
-    width: 300px;
-    height: 100px;
+    top: 12%;
+    left: -280px;
+    width: 340px;
+    height: 120px;
     background:
-        radial-gradient(ellipse at 40% 35%, rgba(230,235,245,.24) 0%, transparent 55%),
-        radial-gradient(ellipse at 60% 40%, rgba(225,232,242,.2) 0%, transparent 50%);
-    border-radius: 50%;
-    animation: cloudy-drift-2 26s linear 5s infinite;
+        radial-gradient(ellipse at 40% 30%, rgba(220,228,242,.28) 0%, transparent 55%),
+        radial-gradient(ellipse at 55% 40%, rgba(210,220,238,.22) 0%, transparent 50%),
+        radial-gradient(ellipse at 20% 35%, rgba(228,234,245,.25) 0%, transparent 52%);
+    border-radius: 40%;
+    animation: cloud-drift-2 28s linear 6s infinite;
 }
-
-@keyframes cloudy-drift-1 {
+@keyframes cloud-drift-1 {
     0% { transform: translateX(0); }
-    100% { transform: translateX(calc(100vw + 600px)); }
+    100% { transform: translateX(calc(100vw + 500px)); }
 }
-
-@keyframes cloudy-drift-2 {
+@keyframes cloud-drift-2 {
     0% { transform: translateX(0); }
-    100% { transform: translateX(calc(100vw + 550px)); }
+    100% { transform: translateX(calc(100vw + 450px)); }
 }
