@@ -86,8 +86,9 @@ var CSS_BASE = document.querySelector('[data-weather-css-base]').dataset.weather
         var wrap = document.createElement('div');
         wrap.id = CONTAINER_ID;
         wrap.className = 'weather-effect-wrap';
-        // z-index 必须高于页面内容层，否则特效被内容区背景色完全遮盖
-        wrap.style.zIndex = '999';
+        // 关键：容器插入 DOM 前就必须设置 pointer-events: none
+        // CSS 文件异步下载，在 CSS 加载完成前容器不能拦截任何点击
+        wrap.style.cssText = 'z-index:999;pointer-events:none;position:fixed;inset:0;';
         document.body.prepend(wrap);  // 插入 body 最前面
         return wrap;
     }
