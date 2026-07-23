@@ -18,7 +18,7 @@ params:
   # 左侧个人信息卡片
   sidebar:
     subtitle: "这里只有一句真话"   # 头像下的一句话简介
-    avatar: img/avatar.png       # 头像：直接写字符串路径，对应 assets/img/avatar.png
+    avatar: "https://cdn.jsdelivr.net/gh/seeking-color/Seeking-Color@main/assets/img/avatar.png"      # 头像：直接写字符串路径，对应 assets/img/avatar.png
                                  # （不想用头像就删掉这一行）
 
   # 文章封面等图片处理
